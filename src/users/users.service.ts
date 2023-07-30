@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
 
 import { Repository } from 'typeorm';
 import User from './user.entity';
@@ -21,7 +22,11 @@ export class UsersService {
   }
  
   async create(userData: CreateUserDto) {
+    console.log(userData);
+    
     const newUser = await this.usersRepository.create(userData);
+    console.log(newUser, 'fff');
+    
     await this.usersRepository.save(newUser);
     return newUser;
   }
@@ -33,4 +38,12 @@ export class UsersService {
     }
     throw new HttpException('User with this id does not exist', HttpStatus.NOT_FOUND);
   }
+
+  async setCurrentRefreshToken(refreshToken: string, userId: number) {
+    const currentHashedRefreshToken = await bcrypt.hash(refreshToken, 10);
+    // await this.usersRepository.update(userId, {
+    //   currentHashedRefreshToken,
+    // });
+  }
+
 }

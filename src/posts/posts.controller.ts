@@ -8,7 +8,7 @@ export class PostsController {
     
     constructor(private readonly postsService: PostsService){}
 
-    @Post()
+    @Post('create')
   @UseGuards(JwtAuthenticationGuard)
   async createPost(@Body() post: CreatePostDto) {
     return this.postsService.createPost(post);
